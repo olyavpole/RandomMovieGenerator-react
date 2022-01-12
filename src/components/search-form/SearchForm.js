@@ -1,5 +1,6 @@
 import useMovieDBService from "../../services/MovieDBService";
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 import './search-form.scss'
 
@@ -8,7 +9,7 @@ const SearchForm = () => {
     const [movie, setMovie] = useState('');
     const [cast, setCast] = useState([]);
 
-    const {getMovieById, getCastById} = useMovieDBService();
+    const {getMovieById, getCastById, discoverMoviesOnGenre} = useMovieDBService();
 
     const onMovieLoaded = (movie) => {
         setMovie(movie);
@@ -20,13 +21,19 @@ const SearchForm = () => {
 
     useEffect(() => {
 
-        let id = Math.round(2 - 0.5 + Math.random() * (70000 - 2 + 1));
+        // let id = Math.round(2 - 0.5 + Math.random() * (700 - 2 + 1));
+
+        const id = 550;
 
         getCastById(id)
-        .then(onCastLoaded)
+            .then(onCastLoaded)
 
         getMovieById(id)
-        .then(onMovieLoaded);
+            .then(onMovieLoaded);
+
+        discoverMoviesOnGenre(10402)
+            .then(res => console.log(res))
+
     }, [])
 
     return (
@@ -82,40 +89,45 @@ const SearchForm = () => {
 
 const View = ({movie, cast}) => {
 
-    const {title, description} = movie;
-
-    console.log(cast);
+    const {title, description, imageSrc} = movie;
 
     const actors = cast.filter(actor => {
         return actor.position === 'Acting'
     })
 
-    const directors = cast.filter(director => {
-        return director.position === 'Directing'
+    let actorsList = actors.map(actor => {
+        return (
+            <Link 
+                to={`/${actor.id}`}
+                className="movie-page__cast-list-item" 
+                key={actor.id}
+                >{actor.name}</Link>
+        )
     })
 
-
-    console.log(actors);
-    console.log(directors);
+    actorsList.length > 10 ? actorsList = actorsList.slice(0, 10) : actorsList = actorsList;
 
     return (
         <>
             <div className="movie-page__wrapper">
                 <div className="movie-page__inner">
-                    <div className="movie-page__title">
-                        {title}
-                    </div>
-                    <div className="movie-page__description">
-                        {description}
-                    </div>
-                    <div className="movie-page__cast">
-                        <ul className="movie-page__cast-list">
-                            
-                        </ul>
+                    <div className="flex">
+                        <div className="movie-page__content">
+                            <div className="movie-page__title">
+                                {title}
+                            </div>
+                            <div className="movie-page__description">
+                                {description}
+                            </div>
+                            <div className="movie-page__cast">
+                                <ul className="movie-page__cast-list">
+                                    {actorsList}
+                                </ul>
+                            </div>
+                        </div>
+                        <img className="movie-page__img" src={imageSrc} alt={title} />
                     </div>
                 </div>
-
-
             </div>
         </>
     )

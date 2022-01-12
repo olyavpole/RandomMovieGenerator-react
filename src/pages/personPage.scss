@@ -1,0 +1,50 @@
+* {
+    color: #fff;
+}
+
+.person-page {
+
+    &__wrapper {
+        display: flex;
+        align-items: center;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    &__inner {
+        min-height: 400px;
+        padding: 20px;
+    }
+
+    &__block {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    &__image {
+        display: block;
+        max-width: 400px;
+        min-height: 200px;
+    }
+
+    &__biography {
+        margin-bottom: 20px;
+    }
+
+    &__link {
+        display: inline-block;
+        width: 100px;
+        margin: 0 auto;
+        text-align: center;
+        border: 1px solid #fff;
+        padding: 10px;
+    }
+}
+
+.img {
+    display: block;
+    min-height: 300px;
+    max-width: 300px;
+    object-fit: cover;
+}
