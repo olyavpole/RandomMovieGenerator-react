@@ -13,7 +13,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage/>}/>
-          <Route path="/:personId" element={<PersonPage/>}/>
+          <Route path="/persons/:personId" element={<PersonPage/>}/>
+          <Route path="/movies/:movieId" element={<MoviePage/>}/>
           <Route path="*" element={<Page404/>}/>
         </Routes>
       </BrowserRouter>

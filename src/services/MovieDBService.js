@@ -53,7 +53,7 @@ const useMovieDBService = () => {
 
     const discoverMoviesOnGenre = async (genre) => {
         let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_genres=${genre}`);
-        return res;
+        return res.results.map(movie => transformMovie(movie));
     }
 
     const getCastById = async (id) => {
