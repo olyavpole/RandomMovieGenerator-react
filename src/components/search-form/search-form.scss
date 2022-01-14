@@ -7,29 +7,28 @@
 
     background-color: #1d1d1d;
     border-radius: 20px;
-    box-shadow: 0 0 20px 2px #e5ff3c;
-    color: #bfbfbf;
+    box-shadow: 0 0 20px 2px #fff82a;
     animation: colors 5s infinite;
 
     @keyframes colors {
         16% {
-            box-shadow: 0 0 20px 2px #ffa435;
+            box-shadow: 0 0 20px 2px #ffc13b;
         }
 
         33% {
-            box-shadow: 0 0 20px 2px #f9458a;
+            box-shadow: 0 0 20px 2px #ff639f;
         }
 
         50% {
-            box-shadow: 0 0 20px 2px #ff35f8;
+            box-shadow: 0 0 20px 2px #eb0cff;
         }
 
         66% {
-            box-shadow: 0 0 20px 2px #46c7ff;
+            box-shadow: 0 0 20px 2px #4ad4fe;
         }
 
         83% {
-            box-shadow: 0 0 20px 2px #5dff4f;
+            box-shadow: 0 0 20px 2px #72ff4b;
         }
     }
 
@@ -56,6 +55,7 @@
         margin-bottom: 40px;
         font-size: 20px;
         background-color: #000;
+        color: inherit;
     }
 
     &__button {
@@ -83,7 +83,6 @@
     padding: 25px;
     background-color: #1d1d1d;
     border-radius: 20px;
-    color: #bfbfbf;
     
     &::before {
         position: absolute;
@@ -114,6 +113,10 @@
         font-size: 30px;
         text-decoration: none;
         color: inherit;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 
     &__description {
@@ -134,5 +137,9 @@
         display: block;
         color: inherit;
         text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }

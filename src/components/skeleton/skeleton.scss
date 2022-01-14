@@ -1,0 +1,58 @@
+.skeleton {
+
+    &__inner {
+        display: flex;
+        justify-content: space-between;
+        height: 400px;
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 25px;
+    }
+
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 48%;
+        height: 100%;
+    }
+
+    &__block {
+        width: 100%;
+        background-color: #C4C4C4;
+
+        &--small {
+            height: 50px;
+        }
+
+        &--medium {
+            height: 100px;
+        }
+
+        &--big {
+            height: 150px;
+        }
+
+        &--right {
+            width: 48%;
+            height: 100%;
+        }
+    }
+}
+
+.pulse {
+    animation: pulse 1.5s ease-in-out .5s infinite
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1
+    }
+    50% {
+        opacity: .4
+    }
+    100% {
+        opacity: 1
+    }
+}

@@ -59,45 +59,46 @@ const PersonPage = () => {
     return (
         <>
             <div className="page">
-                <div className="person-page__wrapper">
+                <div className="person-page">
                     <div className="person-page__inner">
-                        <div className="person-page__block">
-                            <img 
-                                className="person-page__image"
-                                src={person.imageSrc} 
-                                alt={person.name} />
-                            <div className="person-page__info">
-                                <h2 className="person-page__title">
-                                    {person.name}
-                                </h2>
-                                <ul>
-                                    <li>birthdate - {person.birthday}</li>
-                                    <li>birthplace - {person.birthplace}</li>
-                                    <li>death - {person.deathday}</li>
-                                    <li>age - {age}</li>
-                                    <li>profession - {person.profession}</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="person-page__biography">
-                            {person.biography}
-                        </div>
-                        <div className="person-page__movies">
-                            <ul className="person-page__movies-list">
-                                <Swiper
-                                    spaceBetween={50}
-                                    slidesPerView={2}
-                                    onSlideChange={() => console.log('slide change')}
-                                    onSwiper={(swiper) => console.log(swiper)}
-                                    >
-                                        {movies}
-                                </Swiper>
+                        <img 
+                            className="person-page__image"
+                            src={person.imageSrc} 
+                            alt={person.name} />
+                        <div className="person-page__content">
+                            <h2 className="person-page__title">
+                                {person.name}
+                            </h2>
+                            <ul className="person-page__info">
+                                <li className="person-page__info-item"><span>profession</span>{person.profession}</li>
+                                <li className="person-page__info-item"><span>birthdate</span>{person.birthday}</li>
+                                <li className="person-page__info-item"><span>birthplace</span>{person.birthplace}</li>
+                                <li className="person-page__info-item"><span>age</span>{age}</li>
+                                <li className="person-page__info-item"><span>death</span>{person.deathday}</li>
                             </ul>
                         </div>
-                        <Link 
-                        className="person-page__link"
-                        to="/">Go back</Link>
                     </div>
+                    <div className="person-page__biography">
+                        {person.biography}
+                    </div>
+                    <div className="person-page__movies">
+                        <h2 className="person-page__subtitle">
+                            Most mopular movies with {person.name}:
+                        </h2>
+                        <ul className="person-page__movies-list">
+                            <Swiper
+                                spaceBetween={50}
+                                slidesPerView={2}
+                                onSlideChange={() => console.log('slide change')}
+                                onSwiper={(swiper) => console.log(swiper)}
+                                >
+                                    {movies}
+                            </Swiper>
+                        </ul>
+                    </div>
+                    <Link 
+                    className="person-page__link"
+                    to="/">Go back</Link>
                 </div>
             </div>
         </>

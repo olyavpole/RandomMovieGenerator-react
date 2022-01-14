@@ -3,12 +3,14 @@ import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 import useMovieDBService from "../../services/MovieDBService";
+import Spinner from "../spinner/Spinner";
+import Skeleton from '../skeleton/Skeleton';
 
 import './search-form.scss'
 
 const SearchForm = () => {
 
-    const [movie, setMovie] = useState({});
+    const [movie, setMovie] = useState(null);
     const [prevMovie, setPrevMovie] = useState({});
     const [cast, setCast] = useState([]);
 
@@ -17,15 +19,6 @@ const SearchForm = () => {
     const onCastLoaded = (cast) => {
         setCast(cast);
     }
-
-    // useEffect(() => {
-
-    //     let id = Math.round(2 - 0.5 + Math.random() * (700 - 2 + 1));
-
-    //     getCastById(id)
-    //         .then(onCastLoaded)
-
-    // }, [])
 
     const may = (res) => {
 
@@ -38,27 +31,27 @@ const SearchForm = () => {
         
     }
 
-    const onMovieSearch = (genre) => {
-        discoverMoviesOnGenre(genre)
+    const onMovieSearch = (genre, country, year) => {
+        discoverMoviesOnGenre(genre, country, year)
             .then(res => may(res))
     }
 
-    const content = movie ? <View movie={movie} cast={cast}/> : 'No movie'
+    const content = movie ? <View movie={movie} cast={cast}/> : <Skeleton/>;
     
     return (
         <>
             <div className="search-form">
                 <h1 className="search-form__title">
-                    Random Movie For Your Evening
+                    Random Movie Generator
                 </h1>
                 <Formik
                     initialValues={{
                         genre: '',
-                        rate: 0,
+                        year: 0,
                         country: ''
                     }}
                     // validate={values => console.log(values)}
-                    onSubmit={values => onMovieSearch(values.genre, values.rate, values.country)}
+                    onSubmit={values => onMovieSearch(values.genre, values.country, values.year)}
                     >
                     <Form 
                         className="search-form__form" action="submit">
@@ -92,41 +85,47 @@ const SearchForm = () => {
                         </Field>
                         <ErrorMessage name="genre" component="div" />
 
-                        {/* <label className="search-form__label" htmlFor="rate">
-                            Choose genre
-                        </label>
-                        <Field 
-                            as="select"
-                            className="search-form__select"     name="rate" 
-                            id="rate">
-                            <option value="">All rates</option>
-                            <option value="9">9+</option>
-                            <option value="8">8+</option>
-                            <option value="7">7+</option>
-                            <option value="6">6+</option>
-                            <option value="5">5+</option>
-                        </Field>
-                        <ErrorMessage name="rate" component="div" />
-                        
-
                         <label className="search-form__label" htmlFor="country">
                             Choose country
                         </label>
                         <Field 
                             as="select" className="search-form__select" name="country" 
                             id="country">
-                            <option value="">All countries</option>
-                            <option value="USA">USA</option>
-                            <option value="Great Britain">Great Britain</option>
-                            <option value="Russia">Russia</option>
-                            <option value="India">India</option>
-                            <option value="France">France</option>
+                            <option value="xx">All countries</option>
+                            <option value="cn|zh">China</option>
+                            <option value="cs">Chech Republic</option>
+                            <option value="da">Denmark</option>
+                            <option value="de">Germany</option>
+                            <option value="et">Estonia</option>
+                            <option value="fi">Finland</option>
+                            <option value="fr">France</option>
+                            <option value="hu">Hungary</option>
+                            <option value="it">Italy</option>
+                            <option value="ja">Japan</option>
+                            <option value="ko">Korea</option>
+                            <option value="nl">Netherlands</option>
+                            <option value="nb|no">Norway</option>
+                            <option value="pl">Poland</option>
+                            <option value="pt">Portugal</option>
+                            <option value="ru">Russia</option>
+                            <option value="ca|es|eu|gl">Spain</option>
+                            <option value="sv">Sweden</option>
+                            <option value="tr">Turkey</option>
+                            <option value="el">Greece</option>
+                            <option value="en">USA</option>
+                            <option value="hi|kn|ml|ta|te">India</option>
                         </Field>
-                        <ErrorMessage name="country" component="div" /> */}
+                        <ErrorMessage name="country" component="div" />
+
+                        <label className="search-form__label" htmlFor="year">
+                            Choose year
+                        </label>
+                        <Field type="number" name="year" id="year"/>
+                        <ErrorMessage name="year" component="div" />
 
                         <button 
-                            className="search-form__button" type="submit"
-                            onClick={(e) => onMovieSearch(e)}
+                            className="search-form__button"
+                            type="submit"
                             >Search movie</button>
                     </Form>
                 </Formik>
