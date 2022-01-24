@@ -2,6 +2,9 @@ import { useParams, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import useMovieDBService from '../services/MovieDBService';
 
+import Logo from '../components/logo/Logo';
+import noImage from '../images/no-image.png';
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -14,14 +17,8 @@ const PersonPage = () => {
 
     const [person, setPerson] = useState({});
     const [personMovies, setPersonMovies] = useState([]);
-
     const {getPersonById, discoverMoviesWithActor} = useMovieDBService();
-
     const {personId} = useParams();
-
-    let date = new Date();
-    let birthDate = new Date(person.birthday);
-    let age = date.getFullYear() - birthDate.getFullYear() + ' years';
 
     useEffect(() => {
         getPersonById(personId)
@@ -35,6 +32,8 @@ const PersonPage = () => {
 
         const description = movie.description.slice(0, 100) + '...';
 
+        const imagePic = movie.imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : movie.imageSrc;
+
         return (
             <SwiperSlide 
                 className="person-page__movies-item movie-card"
@@ -45,7 +44,7 @@ const PersonPage = () => {
                     >{movie.title}</Link>
                 <img 
                     className="movie-card__img" 
-                    src={movie.imageSrc} 
+                    src={imagePic} 
                     alt={movie.title} />
                 <div className="movie-card__description">{description}</div>
                 <Link 
@@ -56,14 +55,37 @@ const PersonPage = () => {
         )
     })
 
+    const deathdate = person.deathday === false ? null : <li className="person-page__info-item"><span>death</span>{person.deathday}</li>
+
+    //////////////////////
+
+    let now = new Date(); //сегодня
+    let birthDate = new Date(person.birthday); //дата рождения
+    let deathDate = new Date(person.deathday); // дата смерти
+    let thisYearBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate()); // если бы день рождения был в текущем году, то когда
+    let deathYearBirthday = new Date(deathDate.getFullYear(), birthDate.getMonth(), birthDate.getDate()); // если бы день рождения был в год смерти, тог когда
+    let age = now.getFullYear() - birthDate.getFullYear(); // получаем возраст
+    age = now < thisYearBirthday ? (age - 1) + ' years' : age + ' years'; // если для рождения еще не было, вычитаем год
+    let deathAge = deathDate.getFullYear() - birthDate.getFullYear(); // получаем возраст смерти
+    deathAge = deathYearBirthday > deathDate ? (deathAge - 1) + ' years' : deathAge + ' years'; // если в году смерти еще не было др вычитаем год
+
+    let finalAge = person.deathday === false ? <li className="person-page__info-item"><span>age</span>{age}</li> : <li className="person-page__info-item"><span>death age</span>{deathAge}</li>
+
+    //////////////////////
+
+    const imagePic = person.imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : person.imageSrc;
+
+    const slidesPerVue = personMovies.length === 1 ? 1 : 2;
+
     return (
         <>
             <div className="page">
+                <Logo/>
                 <div className="person-page">
                     <div className="person-page__inner">
                         <img 
                             className="person-page__image"
-                            src={person.imageSrc} 
+                            src={imagePic} 
                             alt={person.name} />
                         <div className="person-page__content">
                             <h2 className="person-page__title">
@@ -73,8 +95,8 @@ const PersonPage = () => {
                                 <li className="person-page__info-item"><span>profession</span>{person.profession}</li>
                                 <li className="person-page__info-item"><span>birthdate</span>{person.birthday}</li>
                                 <li className="person-page__info-item"><span>birthplace</span>{person.birthplace}</li>
-                                <li className="person-page__info-item"><span>age</span>{age}</li>
-                                <li className="person-page__info-item"><span>death</span>{person.deathday}</li>
+                                {deathdate}
+                                {finalAge}
                             </ul>
                         </div>
                     </div>
@@ -88,7 +110,7 @@ const PersonPage = () => {
                         <ul className="person-page__movies-list">
                             <Swiper
                                 spaceBetween={50}
-                                slidesPerView={2}
+                                slidesPerView={slidesPerVue}
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}
                                 >

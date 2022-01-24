@@ -8,6 +8,8 @@
         width: 100%;
         margin: 0 auto;
         padding: 25px;
+        background-color: #1d1d1d;
+        border-radius: 20px;
     }
 
     &__wrapper {
@@ -47,12 +49,12 @@
 
 @keyframes pulse {
     0% {
-        opacity: 1
+        opacity: .9
     }
     50% {
         opacity: .4
     }
     100% {
-        opacity: 1
+        opacity: .9
     }
 }

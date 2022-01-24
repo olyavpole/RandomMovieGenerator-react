@@ -41,12 +41,12 @@ const useMovieDBService = () => {
 
     const discoverMoviesWithActor = async (id) => {
         let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_cast=${id}`);
-        let res2 = res.results.slice(0, 5);
+        let res2 = res.results.slice(0, 10);
         return res2.map(movie => transformMovie(movie));
     }
 
-    const discoverMoviesOnGenre = async (genre, language, year) => {
-        let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_genres=${genre}&with_original_language=${language}&primary_release_year=${year}`);
+    const discoverMoviesOnGenre = async (genre, language, fromYear, toYear) => {
+        let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_genres=${genre}&with_original_language=${language}&release_date.gte=${fromYear}&release_date.lte=${toYear}`);
         return res.results.map(movie => transformMovie(movie));
     }
 
@@ -80,17 +80,27 @@ const useMovieDBService = () => {
 
     const transformMovie2 = (movie) => {
 
-        const genres = movie.genres.map(item => {
-            return item.name + ' / ';
+        const genres = movie.genres.map((item, i) => {
+            let symbol = i === (movie.genres.length - 1) ? ' ' : ' / ';
+
+            return item.name + symbol;
         })
 
-        const countries = movie.production_countries.map(item => {
-            return item.name + ' / ';
+        const countries = movie.production_countries.map((item, i) => {
+            let symbol = i === (movie.production_countries.length - 1) ? ' ' : ' / ';
+
+            return item.name + symbol;
         })
 
-        const languages = movie.spoken_languages.map(item => {
-            return item.name + ' / ';
+        const languages = movie.spoken_languages.map((item, i) => {
+            let symbol = i === (movie.spoken_languages.length - 1) ? ' ' : ' / ';
+
+            return item.name + symbol;
         })
+
+        const budget = movie.budget === 0 ? 'There is no information' : movie.budget;
+
+        const revenue = movie.revenue === 0 ? 'There is no information' : movie.revenue;
 
         return {
             id: movie.id,
@@ -99,28 +109,41 @@ const useMovieDBService = () => {
             description: movie.overview,
             imageSrc: 'https://image.tmdb.org/t/p/original/' + movie.backdrop_path,
             releaseDate: movie.release_date,
-            countries: countries,
-            genres: genres,
-            budget: movie.budget,
-            revenue: movie.revenue,
-            languages: languages,
+            countries,
+            genres,
+            budget,
+            revenue,
+            languages,
         }
     }
 
     const transformPerson = (person) => {
+
+        const profession = person.known_for_department === 'Acting' ? 'actor' : '';
+
+        const deathday = person.deathday === null ? false : person.deathday;
+
+        const biography = person.biography === '' ? `There is no information about ${person.name} at the moment.` : person.biography;
+
         return {
             id: person.id,
             name: person.name,
             birthday: person.birthday,
-            deathday: person.deathday,
-            profession: person.known_for_department,
+            deathday,
+            profession,
             birthplace: person.place_of_birth,
-            biography: person.biography,
+            biography,
             imageSrc: 'https://image.tmdb.org/t/p/original/' + person.profile_path,
         }
     }
 
-    return {getMovieById, getCastById, getPersonById, discoverMoviesWithActor, discoverMoviesOnGenre};
+    return {
+            getMovieById, 
+            getCastById, 
+            getPersonById, 
+            discoverMoviesWithActor, 
+            discoverMoviesOnGenre
+        };
 }
 
 export default useMovieDBService;

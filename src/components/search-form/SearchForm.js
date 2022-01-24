@@ -5,6 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import useMovieDBService from "../../services/MovieDBService";
 import Spinner from "../spinner/Spinner";
 import Skeleton from '../skeleton/Skeleton';
+import noImage from '../../images/no-image.png';
 
 import './search-form.scss'
 
@@ -13,6 +14,7 @@ const SearchForm = () => {
     const [movie, setMovie] = useState(null);
     const [prevMovie, setPrevMovie] = useState({});
     const [cast, setCast] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const {getCastById, discoverMoviesOnGenre} = useMovieDBService();
 
@@ -28,15 +30,18 @@ const SearchForm = () => {
         getCastById(prevMovie.id)
             .then(onCastLoaded)
         setMovie(prevMovie);
+        setLoading(false);
         
     }
 
-    const onMovieSearch = (genre, country, year) => {
-        discoverMoviesOnGenre(genre, country, year)
+    const onMovieSearch = (genre, country, fromYear, toYear) => {
+        setLoading(true);
+        discoverMoviesOnGenre(genre, country, fromYear, toYear)
             .then(res => may(res))
     }
 
-    const content = movie ? <View movie={movie} cast={cast}/> : <Skeleton/>;
+    // const content = movie || !loading ? <View movie={movie} cast={cast}/> : <Skeleton/>;
+    const content = movie ? <View movie={movie} cast={cast}/> : <Spinner/>;
     
     return (
         <>
@@ -47,11 +52,12 @@ const SearchForm = () => {
                 <Formik
                     initialValues={{
                         genre: '',
-                        year: 0,
+                        fromYear: 1900,
+                        toYear: 2022,
                         country: ''
                     }}
                     // validate={values => console.log(values)}
-                    onSubmit={values => onMovieSearch(values.genre, values.country, values.year)}
+                    onSubmit={values => onMovieSearch(values.genre, values.country, values.fromYear, (values.toYear + 1))}
                     >
                     <Form 
                         className="search-form__form" action="submit">
@@ -117,11 +123,17 @@ const SearchForm = () => {
                         </Field>
                         <ErrorMessage name="country" component="div" />
 
-                        <label className="search-form__label" htmlFor="year">
-                            Choose year
+                        <label className="search-form__label" htmlFor="fromYear">
+                            Choose fromYear
                         </label>
-                        <Field type="number" name="year" id="year"/>
-                        <ErrorMessage name="year" component="div" />
+                        <Field className="search-form__select" type="number" name="fromYear" id="fromYear"/>
+                        <ErrorMessage name="fromYear" component="div" />
+
+                        <label className="search-form__label" htmlFor="toYear">
+                            Choose toYear
+                        </label>
+                        <Field className="search-form__select" type="number" name="toYear" id="toYear"/>
+                        <ErrorMessage name="toYear" component="div" />
 
                         <button 
                             className="search-form__button"
@@ -138,6 +150,8 @@ const SearchForm = () => {
 const View = ({movie, cast}) => {
 
     const {title, description, imageSrc} = movie;
+
+    const imagePic = imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : imageSrc;
 
     const actors = cast.filter(actor => {
         return actor.position === 'Acting'
@@ -179,7 +193,7 @@ const View = ({movie, cast}) => {
                     </div>
                     <img 
                         className="movie-page__img" 
-                        src={imageSrc} 
+                        src={imagePic} 
                         alt={title} />
                 </div>
             </div>

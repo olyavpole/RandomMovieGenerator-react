@@ -1,0 +1,44 @@
+.logo {
+
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 50px;
+    }
+
+    &__img {
+
+        stop {
+            stop-color: #fff82a;
+            // animation: colorsLogo 5s infinite;
+        }
+
+        &:hover stop{
+            animation-play-state: paused;
+
+            transition: all .5s;
+        }
+    }
+}
+
+@keyframes colorsLogo {
+    16% {
+        stop-color: #ffc13b;
+    }
+
+    33% {
+        stop-color: #ff639f;
+    }
+
+    50% {
+        stop-color: #eb0cff;
+    }
+
+    66% {
+        stop-color: #4ad4fe;
+    }
+
+    83% {
+        stop-color: #72ff4b;
+    }
+}
