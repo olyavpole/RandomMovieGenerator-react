@@ -12,7 +12,6 @@ import './search-form.scss'
 const SearchForm = () => {
 
     const [movie, setMovie] = useState(null);
-    const [prevMovie, setPrevMovie] = useState({});
     const [cast, setCast] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -22,14 +21,10 @@ const SearchForm = () => {
         setCast(cast);
     }
 
-    const may = (res) => {
-
-        let num = Math.round(0 - 0.5 + Math.random() * (20 - 0 + 1));
-
-        setPrevMovie(res[num]);
-        getCastById(prevMovie.id)
+    const onMovieLoaded = (movie) => {
+        getCastById(movie.id)
             .then(onCastLoaded)
-        setMovie(prevMovie);
+        setMovie(movie);
         setLoading(false);
         
     }
@@ -37,11 +32,10 @@ const SearchForm = () => {
     const onMovieSearch = (genre, country, fromYear, toYear) => {
         setLoading(true);
         discoverMoviesOnGenre(genre, country, fromYear, toYear)
-            .then(res => may(res))
+            .then(res => onMovieLoaded(res))
     }
 
-    // const content = movie || !loading ? <View movie={movie} cast={cast}/> : <Skeleton/>;
-    const content = movie ? <View movie={movie} cast={cast}/> : <Spinner/>;
+    const content = movie ? <View movie={movie} cast={cast}/> : <Skeleton/>;
     
     return (
         <>
@@ -124,13 +118,13 @@ const SearchForm = () => {
                         <ErrorMessage name="country" component="div" />
 
                         <label className="search-form__label" htmlFor="fromYear">
-                            Choose fromYear
+                            From Year
                         </label>
                         <Field className="search-form__select" type="number" name="fromYear" id="fromYear"/>
                         <ErrorMessage name="fromYear" component="div" />
 
                         <label className="search-form__label" htmlFor="toYear">
-                            Choose toYear
+                            To Year
                         </label>
                         <Field className="search-form__select" type="number" name="toYear" id="toYear"/>
                         <ErrorMessage name="toYear" component="div" />

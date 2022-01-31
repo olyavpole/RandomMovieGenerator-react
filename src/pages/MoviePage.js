@@ -101,6 +101,7 @@ const MoviePage = () => {
                             <Swiper
                                 spaceBetween={50}
                                 slidesPerView={2}
+                                navigation
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}
                                 >

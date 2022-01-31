@@ -46,8 +46,12 @@ const useMovieDBService = () => {
     }
 
     const discoverMoviesOnGenre = async (genre, language, fromYear, toYear) => {
+
         let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_genres=${genre}&with_original_language=${language}&release_date.gte=${fromYear}&release_date.lte=${toYear}`);
-        return res.results.map(movie => transformMovie(movie));
+        const arr = res.results.map(movie => transformMovie(movie));
+        let num = Math.round(0 - 0.5 + Math.random() * (arr.length - 0 + 1));
+        console.log(arr[num].releaseDate)
+        return arr[num];
     }
 
     const getCastById = async (id) => {
@@ -74,6 +78,7 @@ const useMovieDBService = () => {
             title: movie.title,
             tagline: movie.tagline,
             description: movie.overview,
+            releaseDate: movie.release_date,
             imageSrc: 'https://image.tmdb.org/t/p/original/' + movie.backdrop_path
         }
     }

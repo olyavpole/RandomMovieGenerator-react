@@ -7,9 +7,11 @@ import noImage from '../images/no-image.png';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper';
 
 // Import Swiper styles
 import 'swiper/css';
+import "swiper/css/navigation";
 
 import './personPage.scss';
 
@@ -75,7 +77,7 @@ const PersonPage = () => {
 
     const imagePic = person.imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : person.imageSrc;
 
-    const slidesPerVue = personMovies.length === 1 ? 1 : 2;
+    const slidesPerVue = personMovies.length === 1 ? 1 : 3;
 
     return (
         <>
@@ -109,8 +111,11 @@ const PersonPage = () => {
                         </h2>
                         <ul className="person-page__movies-list">
                             <Swiper
+                                modules={[Navigation]}
                                 spaceBetween={50}
+                                loop={true}
                                 slidesPerView={slidesPerVue}
+                                navigation={{ clickable: true }}
                                 onSlideChange={() => console.log('slide change')}
                                 onSwiper={(swiper) => console.log(swiper)}
                                 >
