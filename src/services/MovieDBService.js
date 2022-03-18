@@ -1,61 +1,35 @@
-// Genres helper
-// Action          28
-// Adventure       12
-// Animation       16
-// Comedy          35
-// Crime           80
-// Documentary     99
-// Drama           18
-// Family          10751
-// Fantasy         14
-// History         36
-// Horror          27
-// Music           10402
-// Mystery         9648
-// Romance         10749
-// Science Fiction 878
-// TV Movie        10770
-// Thriller        53
-// War             10752
-// Western         37
+import useHttp from "../hooks/http.hook";
 
 const useMovieDBService = () => {
+
+    const {request, process, setProcess} = useHttp();
 
     const _apiBase = 'https://api.themoviedb.org/3/';
     const _apiKey = '4650c75309a270a22b99e6b3c3f35747';
 
-    const getResourse = async (url) => {
-        let res = await fetch(url);
+    // запрос по параметрам на главной странице
 
-        if (!res.ok) {
-            throw new Error (`Could not fetch ${url}, status: ${res.status}`)
-        }
+    const discoverMovieWithParams = async (genre, language, fromYear, toYear) => {
+        let res = await request(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=popularity.desc&with_genres=${genre}&with_original_language=${language}&primary_release_date.gte=${fromYear}&primary_release_date.lte=${toYear}`);
 
-        return await res.json();
-    }
-
-    const getMovieById = async (id) => {
-        let res = await getResourse(`${_apiBase}movie/${id}?api_key=${_apiKey}&language=en-US`);
-        return transformMovie2(res);
-    }
-
-    const discoverMoviesWithActor = async (id) => {
-        let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_cast=${id}`);
-        let res2 = res.results.slice(0, 10);
-        return res2.map(movie => transformMovie(movie));
-    }
-
-    const discoverMoviesOnGenre = async (genre, language, fromYear, toYear) => {
-
-        let res = await getResourse(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_genres=${genre}&with_original_language=${language}&release_date.gte=${fromYear}&release_date.lte=${toYear}`);
         const arr = res.results.map(movie => transformMovie(movie));
+
         let num = Math.round(0 - 0.5 + Math.random() * (arr.length - 0 + 1));
-        console.log(arr[num].releaseDate)
+        
         return arr[num];
     }
 
+    // запрос на странице с 1 фильмом
+
+    const getMovieById = async (id) => {
+        let res = await request(`${_apiBase}movie/${id}?api_key=${_apiKey}&language=en-US`);
+        return transformMovie2(res);
+    }
+
+    // запрос на страницу с 1 фильмом (каст фильма)
+
     const getCastById = async (id) => {
-        let res = await getResourse(`${_apiBase}movie/${id}/credits?api_key=${_apiKey}&language=en-US`);
+        let res = await request(`${_apiBase}movie/${id}/credits?api_key=${_apiKey}&language=en-US`);
         return res.cast.map(person => {
             return {
                 id: person.id,
@@ -67,18 +41,27 @@ const useMovieDBService = () => {
         })
     }
 
+    // запрос на странице с 1 актером
+
     const getPersonById = async (id) => {
-        let res = await getResourse(`${_apiBase}person/${id}?api_key=${_apiKey}&language=en-US`);
+        let res = await request(`${_apiBase}person/${id}?api_key=${_apiKey}&language=en-US`);
         return transformPerson(res);
     }
 
+    // запрос на странице с 1 актером (фильмы с ним)
+
+    const discoverMoviesWithActor = async (id) => {
+        let res = await request(`${_apiBase}discover/movie?api_key=${_apiKey}&sort_by=vote_count.desc&with_cast=${id}`);
+        let res2 = res.results.slice(0, 10);
+        return res2.map(movie => transformMovie(movie));
+    }
+
     const transformMovie = (movie) => {
+
         return {
             id: movie.id,
             title: movie.title,
-            tagline: movie.tagline,
             description: movie.overview,
-            releaseDate: movie.release_date,
             imageSrc: 'https://image.tmdb.org/t/p/original/' + movie.backdrop_path
         }
     }
@@ -129,6 +112,7 @@ const useMovieDBService = () => {
         const deathday = person.deathday === null ? false : person.deathday;
 
         const biography = person.biography === '' ? `There is no information about ${person.name} at the moment.` : person.biography;
+        
 
         return {
             id: person.id,
@@ -143,12 +127,35 @@ const useMovieDBService = () => {
     }
 
     return {
+            process,
+            setProcess,
+            discoverMovieWithParams,
             getMovieById, 
             getCastById, 
             getPersonById, 
-            discoverMoviesWithActor, 
-            discoverMoviesOnGenre
+            discoverMoviesWithActor
         };
 }
 
 export default useMovieDBService;
+
+// Genres helper
+// Action          28
+// Adventure       12
+// Animation       16
+// Comedy          35
+// Crime           80
+// Documentary     99
+// Drama           18
+// Family          10751
+// Fantasy         14
+// History         36
+// Horror          27
+// Music           10402
+// Mystery         9648
+// Romance         10749
+// Science Fiction 878
+// TV Movie        10770
+// Thriller        53
+// War             10752
+// Western         37
