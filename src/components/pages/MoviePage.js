@@ -125,19 +125,21 @@ const View = ({movie, cast}) => {
 
     const imagePic = movie.imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : movie.imageSrc;
 
-    const slidesPerVue = cast.length === 1 ? 1 : 2;
+    const slidesPerVue = cast.length === 1 || window.screen.width <= 800 ? 1 : 2;
+
+    console.log(slidesPerVue)
 
     const showAllText = (e) => {
 
-        const clazz = myRef.current.classList;
+        const classes = myRef.current.classList;
 
-        if (clazz.contains('hide')) {
-            clazz.remove('hide');
-            clazz.add('show');
+        if (classes.contains('hide')) {
+            classes.remove('hide');
+            classes.add('show');
             e.target.textContent = 'Hide'
         } else {
-            clazz.remove('show');
-            clazz.add('hide');
+            classes.remove('show');
+            classes.add('hide');
             e.target.textContent = 'Show more'
         }
     }

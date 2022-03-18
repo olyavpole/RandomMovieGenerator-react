@@ -138,7 +138,7 @@ const View = ({person, personMovies}) => {
 
     const imagePic = person.imageSrc === 'https://image.tmdb.org/t/p/original/null' ? noImage : person.imageSrc;
 
-    const slidesPerVue = personMovies.length === 1 ? 1 : 2;
+    const slidesPerVue = personMovies.length === 1 || window.screen.width <= 800 ? 1 : 2;
 
     const showAllText = (e) => {
 

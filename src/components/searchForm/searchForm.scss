@@ -7,6 +7,10 @@
     box-shadow: 0 0 20px 2px #fff82a;
     animation: colors 5s infinite;
 
+    @media (max-width: 800px) {
+        width: 350px;
+    }
+
     @keyframes colors {
         16% {
             box-shadow: 0 0 20px 2px #ffc13b;
@@ -37,10 +41,18 @@
         display: flex;
         justify-content: space-between;
         flex-wrap: wrap;
+
+        @media (max-width: 800px) {
+            flex-direction: column;
+        }
     }
 
     &__inner {
         width: 49%;
+
+        @media (max-width: 800px) {
+            width: 100%;
+        }
     }
 
     &__title {
@@ -66,6 +78,10 @@
         background-color: #000;
         color: inherit;
         outline-color: #bfbfbf;
+
+        @media (max-width: 800px) {
+            margin-bottom: 15px;
+        }
     }
 
     &__button {

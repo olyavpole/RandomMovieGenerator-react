@@ -17,6 +17,10 @@
         justify-content: space-between;
         margin-bottom: 15px;
         align-items: stretch;
+
+        @media (max-width: 800px) {
+            display: block;
+        }
     }
 
     &__image {
@@ -26,16 +30,30 @@
         border-radius: 20px 0 0 0;
         object-fit: cover;
         object-position: top center;
+
+        @media (max-width: 800px) {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 20px 20px 0 0;
+        }
     }
 
     &__content {
         width: 48%;
+
+        @media (max-width: 800px) {
+            width: 100%;
+        }
     }
 
     &__title {
         margin-bottom: 30px;
         font-size: 25px;
         text-transform: uppercase;
+
+        @media (max-width: 800px) {
+            text-align: center;
+        }
     }
 
     &__info {
@@ -71,6 +89,10 @@
         &.hide {
             height: 40px;
             overflow: hidden;
+
+            @media (max-width: 800px) {
+                height: 75px;
+            }
         }
 
         &.show {
